@@ -119,21 +119,6 @@ class MotionPlanning(Drone):
         data = msgpack.dumps(self.waypoints)
         self.connection._master.write(data)
 
-    def get_arbitory_goal(self, data, i):
-
-        ind = np.random.choice(data.shape[0], 1)
-        # print("random array element ", ind)
-        # print("North ", data[ind[0], 0])
-        # print("East ", data[ind[0], 1])
-        # print("Down ", data[ind[0], 2])
-
-        if i == -1:
-            latlon_coordinates = [data[ind[0], 0], data[ind[0], 1], data[ind[0], 2]]
-        else:
-            latlon_coordinates = [data[i, 0], data[i, 1], data[i, 2]]
-
-        # return self.local_to_global(NED_coordinates, global_home)
-        return latlon_coordinates
 
     def closest_point(self,graph, current_point):
         """
@@ -179,25 +164,7 @@ class MotionPlanning(Drone):
                 i += 1
         return pruned_path
 
-
-
-    def local_to_global(local_position, global_home):
-
-        # TODO: get easting, northing, zone letter and number of global_home
-        # TODO: get (lat, lon) from local_position and converted global_home
-        # TODO: Create global_position of (lat, lon, alt)
-
-        (east_home, north_home, zone_number, zone_letter) = utm.from_latlon(
-            global_home[1], global_home[0])
-
-        (lat, lon) = utm.to_latlon(east_home + local_position[1],
-                                   north_home + local_position[0], zone_number,
-                                   zone_letter)
-
-        global_position = numpy.array([lon, lat, -local_position[2]])
-
-        return global_position
-
+    # This is helper functiom to get arbitrary goal location by taking the lat,lon and northing and easting offset
     def global_to_local(self,lat,lon,north_offset, east_offset):
 
         # self.set_home_position(np.float64(37.795345), np.float64(-122.398013), 0)
@@ -256,6 +223,7 @@ class MotionPlanning(Drone):
         #(37.795345, -122.398013)? Mine is (633, 393).
 
         # TODO: convert start position to current position rather than map center
+        #Setting the currposstion relative to the north_offset and  eastoffset  by adding to get start postion in the Grid
         grid_start = (-north_offset + int(current_local_pos[0]), -east_offset + int(current_local_pos[1]))
         #grid_start = (-north_offset-100, -east_offset -100)
 
