@@ -53,10 +53,14 @@ class MotionPlanning(Drone):
             if -1.0 * self.local_position[2] > 0.95 * self.target_position[2]:
                 self.waypoint_transition()
         elif self.flight_state == States.WAYPOINT:
+            # Adjusting Deadbands of local position so that vehicle move one to next target
+
             if np.linalg.norm(self.target_position[0:2] - self.local_position[0:2]) < 3.0:
                 if len(self.waypoints) > 0:
                     self.waypoint_transition()
                 else:
+                    # Adjusting Deadbands of local position so that vehicle move one to next target
+
                     if np.linalg.norm(self.local_velocity[0:2]) < 5.0:
                         self.landing_transition()
 
@@ -256,7 +260,7 @@ class MotionPlanning(Drone):
 
         print("pruned_path = ",pruned_path)
         # Convert path to waypoints
-        waypoints = [[p[0] + north_offset, p[1] + east_offset, TARGET_ALTITUDE, 0] for p in pruned_path]
+        waypoints = [[int(p[0] + north_offset), int(p[1] + east_offset), TARGET_ALTITUDE, 0] for p in pruned_path]
 
 
 
