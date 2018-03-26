@@ -39,7 +39,11 @@ For this project, you are provided with two scripts, `motion_planning.py` and `p
  
 ```sh
 source activate fcnd # if you haven't already sourced your Python environment, do so now.
+### Grid based approach is for the project submission
 python motion_planning.py -lat 37.790215 -lon -122.400240  - To Run Grid Based Approach
+## Clay st lat 37.795925  lon -122.400210
+
+The Graph base in the optional implementation - Please ignore if you are not interested in testing
 python motion_planning_graph.py -lat 37.790215 -lon -122.400240 -- To Run Graph Based Approach
 
 ```
